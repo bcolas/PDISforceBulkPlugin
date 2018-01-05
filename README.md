@@ -1,10 +1,10 @@
 PDISforceBulkPlugin
 ===================
-PDISforceBulkPlugin implements Asynchronous Salesforce API.
+PDISforceBulkPlugin implements Asynchronous Salesforce API to manage Salesforce objects.
 
-It will help you deal with volume from Salesforce.
+It will help you deal with volume read from Salesforce.
 
-The first step to be implemented is the Salesforce Bulk Input.
+The first step implemented is the Salesforce Bulk Input.
 
 04/11/2018 : 
  - Mavenize the project
