@@ -25,6 +25,8 @@ import org.pentaho.di.trans.step.StepInterface;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.step.StepMetaInterface;
 import org.pentaho.di.trans.steps.salesforceinput.SalesforceInputField;
+import org.pentaho.di.trans.steps.sforcebulkutils.SalesforceBulkConnection;
+import org.pentaho.di.trans.steps.sforcebulkutils.SalesforceBulkConnectionUtils;
 
 /**
  * Read data from Salesforce module in batch mode, convert them to rows and writes these to one or more output streams.
@@ -34,7 +36,7 @@ import org.pentaho.di.trans.steps.salesforceinput.SalesforceInputField;
  */
 public class SalesforceBulkInput extends BaseStep implements StepInterface
 {
-	private static Class<?> PKG = SalesforceBulkInputMeta.class; // for i18n purposes, needed by Translator2!!   $NON-NLS-1$
+	private static Class<?> PKG = SalesforceBulkConnectionUtils.class; // for i18n purposes, needed by Translator2!!   $NON-NLS-1$
 
 	private SalesforceBulkInputMeta meta;
 	private SalesforceBulkInputData data;
@@ -80,7 +82,7 @@ public class SalesforceBulkInput extends BaseStep implements StepInterface
 			putRow(data.outputRowMeta, outputRowData);  // copy row to output rowset(s);
 		    
 		    if (checkFeedback(getLinesInput())) {
-		    	if(log.isDetailed()) logDetailed(BaseMessages.getString(PKG, "SalesforceBulkInput.log.LineRow",""+ getLinesInput()));
+		    	if(log.isDetailed()) logDetailed(BaseMessages.getString(PKG, "SalesforceBulk.log.LineRow",""+ getLinesInput()));
 		    }
 	          
             data.rownr++;
@@ -95,7 +97,7 @@ public class SalesforceBulkInput extends BaseStep implements StepInterface
 		         sendToErrorRow = true;
 		         errorMessage = e.toString();
 			} else {
-				logError(BaseMessages.getString(PKG, "SalesforceBulkInput.log.Exception", e.getMessage()));
+				logError(BaseMessages.getString(PKG, "SalesforceBulk.Log.Exception", e.getMessage()));
                 logError(Const.getStackTracker(e));
 				setErrors(1);
 				stopAll();
@@ -201,7 +203,7 @@ public class SalesforceBulkInput extends BaseStep implements StepInterface
 			data.previousRow = irow==null?outputRowData:(Object[])irow.cloneRow(outputRowData); // copy it to make
 		 }
 		 catch (Exception e) {
-			throw new KettleException(BaseMessages.getString(PKG, "SalesforceBulkInput.Exception.CanNotReadFromSalesforce"), e);
+			throw new KettleException(BaseMessages.getString(PKG, "SalesforceBulkInput.Error.CanNotReadFromSalesforce"), e);
 		 }
 		
 		return outputRowData;
@@ -250,20 +252,20 @@ public class SalesforceBulkInput extends BaseStep implements StepInterface
 			
 			 // Check if field list is filled 
 			 if (data.nrfields==0) {
-				 log.logError(BaseMessages.getString(PKG, "SalesforceInputDialog.FieldsMissing.DialogMessage"));
+				 log.logError(BaseMessages.getString(PKG, "SalesforceBulkInput.Error.FieldsMissing"));
 				 return false;
 			 }
 			 
 			// check soap URL
 			String soapUrl=environmentSubstitute(meta.getSoapURL());
 			if(Const.isEmpty(soapUrl)) {
-				log.logError(BaseMessages.getString(PKG, "SalesforceBulkInput.TargetURLMissing.Error"));
+				log.logError(BaseMessages.getString(PKG, "SalesforceBulkMeta.CheckResult.NoURL"));
 				return false;
 			}
 			// check username
 			String realUser=environmentSubstitute(meta.getUserName());
 			if(Const.isEmpty(realUser)) {
-				log.logError(BaseMessages.getString(PKG, "SalesforceBulkInput.UsernameMissing.Error"));
+				log.logError(BaseMessages.getString(PKG, "SalesforceBulkMeta.CheckResult.NoUsername"));
 				return false;
 			}
 			try  
@@ -272,7 +274,7 @@ public class SalesforceBulkInput extends BaseStep implements StepInterface
 				data.Module=environmentSubstitute(meta.getModule());
 				// Check if module is specified 
 				if (Const.isEmpty(data.Module)) {
-					log.logError(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.ModuleMissing.DialogMessage"));
+					log.logError(BaseMessages.getString(PKG, "SalesforceBulkMeta.CheckResult.NoModule"));
 					return false;
 				}
 				 
@@ -306,7 +308,7 @@ public class SalesforceBulkInput extends BaseStep implements StepInterface
 			} 
 			catch(KettleException ke) 
 			{ 
-				logError(BaseMessages.getString(PKG, "SalesforceBulkInput.Log.ErrorOccurredDuringStepInitialize")+ke.getMessage()); //$NON-NLS-1$
+				logError(BaseMessages.getString(PKG, "SalesforceBulk.Log.ErrorOccurredDuringStepInitialize")+ke.getMessage()); //$NON-NLS-1$
 			}
 
 			return true;
