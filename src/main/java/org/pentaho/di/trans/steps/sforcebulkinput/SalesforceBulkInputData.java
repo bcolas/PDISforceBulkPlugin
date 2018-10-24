@@ -11,6 +11,7 @@ package org.pentaho.di.trans.steps.sforcebulkinput;
 import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.trans.step.BaseStepData;
 import org.pentaho.di.trans.step.StepDataInterface;
+import org.pentaho.di.trans.steps.sforcebulkutils.SalesforceBulkConnection;
 
 /*
  * @author Samatar
@@ -33,7 +34,7 @@ public class SalesforceBulkInputData extends BaseStepData implements StepDataInt
 	public int nrRecords;
 	// We use this variable to query more
 	// we initialize it each time we call query more
-	public int recordIndex;;
+	public int recordIndex;
 	public SalesforceBulkConnection connection;
 	public boolean finishedRecord;
 
