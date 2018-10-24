@@ -2,9 +2,9 @@ PDISforceBulkPlugin
 ===================
 PDISforceBulkPlugin implements Asynchronous Salesforce API to manage Salesforce objects.
 
-It will help you deal with volume read from Salesforce.
+It will help you deal with volume read from / delete in Salesforce.
 
-The first step implemented is the Salesforce Bulk Input.
+Two different steps are implemented : Salesforce Bulk Input & Salesforce Bulk Delete
 
 04/11/2017: 
  - Mavenize the project
@@ -12,6 +12,9 @@ The first step implemented is the Salesforce Bulk Input.
 
 09/05/2018:
  - Also works with PDI 8.0
+ 
+24/10/2018
+ - New step : Bulk Delete
 
 ### Manual installation
 extract build/pdi-sforcebulk-input-1.2.0-SNAPSHOT.zip into data-integration/plugins/
