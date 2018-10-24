@@ -70,16 +70,15 @@ import org.pentaho.di.ui.trans.step.BaseStepDialog;
 
 import com.sforce.soap.partner.Field;
 
-import org.pentaho.di.trans.steps.sforcebulkinput.SalesforceBulkConnection;
-import org.pentaho.di.trans.steps.sforcebulkinput.SalesforceBulkConnectionUtils;
 import org.pentaho.di.trans.steps.sforcebulkinput.SalesforceBulkInputMeta;
-
+import org.pentaho.di.trans.steps.sforcebulkutils.SalesforceBulkConnection;
+import org.pentaho.di.trans.steps.sforcebulkutils.SalesforceBulkConnectionUtils;
 import org.pentaho.di.trans.steps.salesforceinput.SalesforceInputField;
 import org.pentaho.di.trans.steps.salesforceinput.SOQLValuesHighlight;
 
 public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDialogInterface {
 	
-	private static Class<?> PKG = SalesforceBulkInputMeta.class; // for i18n purposes, needed by Translator2!!   $NON-NLS-1$
+	private static Class<?> PKG = SalesforceBulkConnectionUtils.class; // for i18n purposes, needed by Translator2!!   $NON-NLS-1$
 
 	private String DEFAULT_DATE_TIME_FORMAT="yyyy-MM-dd'T'HH:mm:ss'.000Z'";
 	private String DEFAULT_DATE_FORMAT= "yyyy-MM-dd";
@@ -233,7 +232,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
         // START CONNECTION GROUP
 
         wConnectionGroup = new Group(wFileComp, SWT.SHADOW_ETCHED_IN);
-        wConnectionGroup.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.ConnectionGroup.Label")); //$NON-NLS-1$;
+        wConnectionGroup.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.ConnectionGroup.Label")); //$NON-NLS-1$;
         FormLayout fconnLayout = new FormLayout();
         fconnLayout .marginWidth = 3;
         fconnLayout .marginHeight = 3;
@@ -241,8 +240,8 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
         props.setLook(wConnectionGroup);
 		
 	    // Webservice URL
-        wSoapURL = new LabelTextVar(transMeta,wConnectionGroup, BaseMessages.getString(PKG, "SalesforceBulkInputDialog.SoapURL.Label"), 
-        		BaseMessages.getString(PKG, "SalesforceBulkInputDialog.SoapURL.Tooltip"));
+        wSoapURL = new LabelTextVar(transMeta,wConnectionGroup, BaseMessages.getString(PKG, "SalesforceBulkDialog.URL.Label"), 
+        		BaseMessages.getString(PKG, "SalesforceBulkDialog.URL.Tooltip"));
         props.setLook(wSoapURL);
         wSoapURL.addModifyListener(lsMod);
         fdSoapURL = new FormData();
@@ -252,8 +251,8 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
         wSoapURL.setLayoutData(fdSoapURL);     
 
 	      // UserName line
-        wUserName = new LabelTextVar(transMeta,wConnectionGroup, BaseMessages.getString(PKG, "SalesforceBulkInputDialog.User.Label"), 
-        		BaseMessages.getString(PKG, "SalesforceBulkInputDialog.User.Tooltip"));
+        wUserName = new LabelTextVar(transMeta,wConnectionGroup, BaseMessages.getString(PKG, "SalesforceBulkDialog.User.Label"), 
+        		BaseMessages.getString(PKG, "SalesforceBulkDialog.User.Tooltip"));
         props.setLook(wUserName);
         wUserName.addModifyListener(lsMod);
         fdUserName = new FormData();
@@ -263,8 +262,8 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
         wUserName.setLayoutData(fdUserName);
 		
         // Password line
-        wPassword = new LabelTextVar(transMeta,wConnectionGroup, BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Password.Label"), 
-        		BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Password.Tooltip"));
+        wPassword = new LabelTextVar(transMeta,wConnectionGroup, BaseMessages.getString(PKG, "SalesforceBulkDialog.Password.Label"), 
+        		BaseMessages.getString(PKG, "SalesforceBulkDialog.Password.Tooltip"));
         props.setLook(wPassword);
         wPassword.setEchoChar('*');
         wPassword.addModifyListener(lsMod);
@@ -285,10 +284,10 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 
 		// Test Salesforce connection button
 		wTest=new Button(wConnectionGroup,SWT.PUSH);
-		wTest.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.TestConnection.Label"));
+		wTest.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.TestConnection.Label"));
  		props.setLook(wTest);
 		fdTest=new FormData();
-		wTest.setToolTipText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.TestConnection.Tooltip"));
+		wTest.setToolTipText(BaseMessages.getString(PKG, "SalesforceBulkDialog.TestConnection.Tooltip"));
 		//fdTest.left = new FormAttachment(middle, 0);
 		fdTest.top  = new FormAttachment(wPassword, margin);
 		fdTest.right= new FormAttachment(100, 0);
@@ -307,7 +306,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
         // START SETTINGS GROUP
 
         wSettingsGroup = new Group(wFileComp, SWT.SHADOW_ETCHED_IN);
-        wSettingsGroup.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.HttpAuthGroup.Label")); //$NON-NLS-1$;
+        wSettingsGroup.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.SettingsGroup.Label")); //$NON-NLS-1$;
         FormLayout fsettingsLayout = new FormLayout();
         fsettingsLayout .marginWidth = 3;
         fsettingsLayout .marginHeight = 3;
@@ -316,7 +315,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
         
  		// Module
 		wlModule=new Label(wSettingsGroup, SWT.RIGHT);
-        wlModule.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Module.Label"));
+        wlModule.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.Module.Label"));
         props.setLook(wlModule);
         fdlModule=new FormData();
         fdlModule.left = new FormAttachment(0, 0);
@@ -675,7 +674,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 	
 		// Timeout
 		wlTimeOut = new Label(wContentComp, SWT.RIGHT);
-		wlTimeOut.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.TimeOut.Label"));
+		wlTimeOut.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.TimeOut.Label"));
 		props.setLook(wlTimeOut);
 		fdlTimeOut = new FormData();
 		fdlTimeOut.left = new FormAttachment(0, 0);
@@ -711,7 +710,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		
 		// Use compression?
 		wlUseCompression=new Label(wContentComp, SWT.RIGHT);
-		wlUseCompression.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.UseCompression.Label"));
+		wlUseCompression.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.UseCompression.Label"));
  		props.setLook(wlUseCompression);
 		fdlUseCompression=new FormData();
 		fdlUseCompression.left = new FormAttachment(0, 0);
@@ -720,7 +719,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		wlUseCompression.setLayoutData(fdlUseCompression);
 		wUseCompression=new Button(wContentComp, SWT.CHECK );
  		props.setLook(wUseCompression);
-		wUseCompression.setToolTipText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.UseCompression.Tooltip"));
+		wUseCompression.setToolTipText(BaseMessages.getString(PKG, "SalesforceBulkDialog.UseCompression.Tooltip"));
 		fdUseCompression=new FormData();
 		fdUseCompression.left = new FormAttachment(middle, 0);
 		fdUseCompression.top  = new FormAttachment(wMax, margin);
@@ -729,7 +728,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		
 		// Limit rows
 		wlLimit = new Label(wContentComp, SWT.RIGHT);
-		wlLimit.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Limit.Label"));
+		wlLimit.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.Limit.Label"));
 		props.setLook(wlLimit);
 		fdlLimit = new FormData();
 		fdlLimit.left = new FormAttachment(0, 0);
@@ -1019,18 +1018,19 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		if(successConnection) {
 			
 			MessageBox mb = new MessageBox(shell, SWT.OK | SWT.ICON_INFORMATION );
-			mb.setMessage(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Connected.OK",realUsername) +Const.CR);
-			mb.setText(BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Connected.Title.Ok")); 
+			mb.setMessage(BaseMessages.getString(PKG, "SalesforceBulkDialog.Connected.OK",realUsername) +Const.CR);
+			mb.setText(BaseMessages.getString(PKG, "SalesforceBulkDialog.Connected.Title.Ok")); 
 			mb.open();
 		}else{
-			new ErrorDialog(shell,BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Connected.Title.Error"),
-					BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Connected.NOK",realUsername),new Exception(msgError));
+			new ErrorDialog(shell,BaseMessages.getString(PKG, "SalesforceBulkDialog.Connected.Title.Error"),
+					BaseMessages.getString(PKG, "SalesforceBulkDialog.Connected.NOK",realUsername),new Exception(msgError));
 		}
 	}
 
 
  	private void get() {
  		SalesforceBulkConnection connection = null;
+ 		String realModule = null;
  		try {
 
  			SalesforceBulkInputMeta meta = new SalesforceBulkInputMeta();
@@ -1040,7 +1040,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
  			wFields.removeAll();
 
  			// get real values
- 			String realModule = transMeta.environmentSubstitute(meta.getModule());
+ 			realModule = transMeta.environmentSubstitute(meta.getModule());
  			String soapURL = transMeta.environmentSubstitute(meta.getSoapURL());
  			String realUsername = transMeta.environmentSubstitute(meta.getUserName());
  			String realPassword = transMeta.environmentSubstitute(meta.getPassword());
@@ -1065,11 +1065,11 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
  			wFields.setRowNums();
  			wFields.optWidth(true);
  		} catch (KettleException e) {
- 			new ErrorDialog(shell, BaseMessages.getString(PKG, "SalesforceBulkInputMeta.ErrorRetrieveData.DialogTitle"),
- 					BaseMessages.getString(PKG, "SalesforceBulkInputMeta.ErrorRetrieveData.DialogMessage"), e);
+ 			new ErrorDialog(shell, BaseMessages.getString(PKG, "SalesforceBulkInputDialog.Error.RetrieveDataTitle"),
+ 					BaseMessages.getString(PKG, "SalesforceInputDialog.Error.RetrieveDataMessage",realModule), e);
  		} catch (Exception e) {
- 			new ErrorDialog(shell, BaseMessages.getString(PKG, "SalesforceBulkInputMeta.ErrorRetrieveData.DialogTitle"),
- 					BaseMessages.getString(PKG, "SalesforceBulkInputMeta.ErrorRetrieveData.DialogMessage"), e);
+ 			new ErrorDialog(shell, BaseMessages.getString(PKG, "SalesforceInputDialog.Error.RetrieveDataTitle"),
+ 					BaseMessages.getString(PKG, "SalesforceInputDialog.Error.RetrieveDataMessage",realModule), e);
  		} finally {
  			if (connection != null) {
  				try {
@@ -1302,7 +1302,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		} catch (KettleException e) {
 			new ErrorDialog(
 					shell,BaseMessages.getString(PKG, "SalesforceBulkInputDialog.ErrorValidateData.DialogTitle"),
-					BaseMessages.getString(PKG, "SalesforceBulkInputDialog.ErrorValidateData.DialogMessage"),	e);
+					BaseMessages.getString(PKG, "SalesforceInputDialog.ErrorValidateData.DialogMessage"),	e);
 		}
 		dispose();
 	}
@@ -1373,7 +1373,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 					shell,
 					props.getDefaultPreviewSize(),
 					BaseMessages.getString(PKG, "SalesforceBulkInputDialog.NumberRows.DialogTitle"),
-					BaseMessages.getString(PKG, "SalesforceBulkInputDialog.NumberRows.DialogMessage"));
+					BaseMessages.getString(PKG, "SalesforceInputDialog.NumberRows.DialogMessage"));
 			int previewSize = numberDialog.open();
 			if (previewSize > 0) {
 				TransPreviewProgressDialog progressDialog = new TransPreviewProgressDialog(
@@ -1436,8 +1436,8 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 			    gotModule = true;
 	        	getModulesListError = false;
 			}catch(Exception e) {
-				new ErrorDialog(shell,BaseMessages.getString(PKG, "SalesforceBulkInputDialog.ErrorRetrieveModules.DialogTitle"),
-								BaseMessages.getString(PKG, "SalesforceBulkInputDialog.ErrorRetrieveData.ErrorRetrieveModules"),e);
+				new ErrorDialog(shell,BaseMessages.getString(PKG, "SalesforceBulkDialog.Error.RetrieveModules.DialogTitle"),
+								BaseMessages.getString(PKG, "SalesforceBulkDialog.Error.RetrieveModules.DialogMessage"),e);
 				getModulesListError = true;
 			} finally{
 				if(!Const.isEmpty(selectedField)) wModule.setText(selectedField);
