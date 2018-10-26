@@ -64,7 +64,7 @@ public class SalesforceBulkInput extends BaseStep implements StepInterface
 			 }
 			
 		    // Let's query Salesforce
-		    data.connection.query();
+		    data.connection.query(meta.isQueryAll());
 	        
 		}
 		

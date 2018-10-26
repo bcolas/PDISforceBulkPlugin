@@ -109,6 +109,8 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 	
 	private Label wlInclModuleField,wlLimit,wlMax,wlTimeOut,wlCondition,wlModule,wlInclSQLField,wlInclSQL;
 	
+	private Label wlQueryAll;
+	
 	private Group wConnectionGroup, wSettingsGroup;
 	
 	private Label wlInclTimestampField,wlInclTimestamp, wlUseCompression;
@@ -117,7 +119,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 	
 	private FormData fdlInclTimestamp,fdInclTimestamp,fdlInclTimestampField;
 
-	private Button wInclSQL;
+	private Button wInclSQL, wQueryAll;
 	
 	private TextVar wInclSoapURLField,wInclModuleField,wInclRownumField,wInclSQLField;
 	
@@ -142,7 +144,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 
 	private Group wAdditionalFields, wAdvancedGroup;
 	
-	private FormData fdAdditionalFields;
+	private FormData fdAdditionalFields, fdAdvancedGroup;
 	
 	/*private Label 		wlRecordsFilter;
 	private CCombo 		wRecordsFilter;*/
@@ -449,6 +451,47 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		wContentComp.setLayout(contentLayout);
 		
 		// ///////////////////////////////
+	    // START OF Advanced GROUP //
+	    // ///////////////////////////////
+
+	    wAdvancedGroup = new Group( wContentComp, SWT.SHADOW_NONE );
+	    props.setLook( wAdvancedGroup );
+	    wAdvancedGroup.setText( BaseMessages.getString( PKG, "SalesforceBulkInputDialog.AdvancedGroup.Label" ) );
+
+	    FormLayout advancedgroupLayout = new FormLayout();
+	    advancedgroupLayout.marginWidth = 10;
+	    advancedgroupLayout.marginHeight = 10;
+	    wAdvancedGroup.setLayout( advancedgroupLayout );
+	    
+	    // Query All?
+	    wlQueryAll = new Label( wAdvancedGroup, SWT.RIGHT );
+	    wlQueryAll.setText( BaseMessages.getString( PKG, "SalesforceBulkInputDialog.QueryAll.Label" ) );
+	    props.setLook( wlQueryAll );
+	    FormData fdlQueryAll = new FormData();
+	    fdlQueryAll.left = new FormAttachment( 0, 0 );
+	    fdlQueryAll.top = new FormAttachment( 0, 2 * margin );
+	    fdlQueryAll.right = new FormAttachment( middle, -margin );
+	    wlQueryAll.setLayoutData( fdlQueryAll );
+	    wQueryAll = new Button( wAdvancedGroup, SWT.CHECK );
+	    props.setLook( wQueryAll );
+	    wQueryAll.setToolTipText( BaseMessages.getString( PKG, "SalesforceBulkInputDialog.QueryAll.Tooltip" ) );
+	    FormData fdQueryAll = new FormData();
+	    fdQueryAll.left = new FormAttachment( middle, 0 );
+	    fdQueryAll.top = new FormAttachment( 0, 2 * margin );
+	    fdQueryAll.right = new FormAttachment( 100, -margin );
+	    wQueryAll.setLayoutData( fdQueryAll );
+	    
+	    fdAdvancedGroup = new FormData();
+	    fdAdvancedGroup.left = new FormAttachment( 0, margin );
+	    fdAdvancedGroup.top = new FormAttachment( 0, 2 * margin );
+	    fdAdvancedGroup.right = new FormAttachment( 100, -margin );
+	    wAdvancedGroup.setLayoutData( fdAdvancedGroup );
+	    
+	    // ///////////////////////////////////////////////////////////
+	    // / END OF Advanced GROUP
+	    // ///////////////////////////////////////////////////////////
+		
+		// ///////////////////////////////
 		// START OF Additional Fields GROUP  //
 		///////////////////////////////// 
 
@@ -664,7 +707,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		
 		fdAdditionalFields = new FormData();
 		fdAdditionalFields.left = new FormAttachment(0, margin);
-		fdAdditionalFields.top = new FormAttachment(0, 2*margin);
+		fdAdditionalFields.top = new FormAttachment( wAdvancedGroup, margin );
 		fdAdditionalFields.right = new FormAttachment(100, -margin);
 		wAdditionalFields.setLayoutData(fdAdditionalFields);
 		
@@ -1224,6 +1267,8 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		wInclRownumField.setText(Const.NVL(in.getRowNumberField(),""));
 		wInclRownum.setSelection(in.includeRowNumber());
 		
+		wQueryAll.setSelection( in.isQueryAll() );
+		
 		wTimeOut.setText(Const.NVL(in.getTimeOut(), SalesforceBulkConnectionUtils.DEFAULT_TIMEOUT));
 		wUseCompression.setSelection(in.isUsingCompression());
 		wLimit.setText("" + in.getRowLimit());
@@ -1333,6 +1378,7 @@ public class SalesforceBulkInputDialog extends BaseStepDialog implements StepDia
 		in.setIncludeTimestamp(wInclTimestamp.getSelection());
 		in.setIncludeModule(wInclModule.getSelection());
 		in.setIncludeRowNumber(wInclRownum.getSelection());
+		in.setQueryAll( wQueryAll.getSelection() );
 		int nrFields = wFields.nrNonEmpty();
 
 		in.allocate(nrFields);

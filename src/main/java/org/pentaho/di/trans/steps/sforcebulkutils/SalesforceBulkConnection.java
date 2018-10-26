@@ -452,7 +452,7 @@ public class SalesforceBulkConnection {
 	  return results;
 	}
 	 
-	public void query() throws KettleException {
+	public void query(boolean queryAll) throws KettleException {
 		 
 		if(getBinding()==null)  throw new KettleException(BaseMessages.getString(PKG, "SalesforceBulkConnection.Error.CanNotGetBinding"));
 		
@@ -464,7 +464,7 @@ public class SalesforceBulkConnection {
 		    			        
 		    if (getSQL()!=null && log.isDetailed()) log.logDetailed(BaseMessages.getString(PKG, "SalesforceBulkConnection.Log.SQLString") + " : " +  getSQL());        
 		  
-		    initJob(getModule(), OperationEnum.query);
+		    initJob(getModule(), (queryAll?OperationEnum.queryAll:OperationEnum.query));
 		      
 		    ByteArrayInputStream bout = new ByteArrayInputStream(getSQL().getBytes());
 		    createBatch(bout);

@@ -108,6 +108,9 @@ public class SalesforceBulkInputMeta extends BaseStepMeta implements StepMetaInt
 	
 	/** The maximum number of lines expected */
 	private String rowMax;
+	
+	/** Query all records including deleted ones **/
+	private boolean queryAll;
 
 	/** The fields to return... */
 	private SalesforceInputField inputFields[];
@@ -218,6 +221,20 @@ public class SalesforceBulkInputMeta extends BaseStepMeta implements StepMetaInt
 		this.condition = condition;
 	}
  
+	/**
+	 * @return Returns the queryAll.
+	 */
+	public boolean isQueryAll() {
+	    return queryAll;
+	}
+
+	/**
+	 * @param queryAll
+	 *          The queryAll to set.
+	 */
+	public void setQueryAll( boolean value ) {
+	  this.queryAll = value;
+	}
     
 	/**
 	 * @return Returns the soapurl.
@@ -524,6 +541,7 @@ public class SalesforceBulkInputMeta extends BaseStepMeta implements StepMetaInt
 		retval.append("    "+XMLHandler.addTagValue("include_Timestamp",includeTimestamp));
 		retval.append("    "+XMLHandler.addTagValue("timestamp_field",   timestampField));
 		retval.append("    "+XMLHandler.addTagValue("useCompression",   useCompression));
+		retval.append("    "+XMLHandler.addTagValue( "queryAll", queryAll ) );
 		
 		retval.append("    <fields>"+Const.CR);
 		for (int i=0;i<inputFields.length;i++)
@@ -567,6 +585,7 @@ public class SalesforceBulkInputMeta extends BaseStepMeta implements StepMetaInt
 			timestampField     = XMLHandler.getTagValue(stepnode, "timestamp_field");
 			useCompression   = "Y".equalsIgnoreCase(XMLHandler.getTagValue(stepnode, "useCompression"));
 			
+			queryAll = "Y".equalsIgnoreCase( XMLHandler.getTagValue( stepnode, "queryAll" ) );
 			
 			Node fields     = XMLHandler.getSubNode(stepnode,  "fields");
 			int nrFields    = XMLHandler.countNodes(fields,    "field");
@@ -601,6 +620,7 @@ public class SalesforceBulkInputMeta extends BaseStepMeta implements StepMetaInt
 	public void setDefault()
 	{
 		includeDeletionDate=false;
+		queryAll = false;
 		nrFields=0;
 		soapurl=SalesforceBulkConnectionUtils.SOAP_DEFAULT_URL ;
 		password = "";
@@ -732,6 +752,7 @@ public class SalesforceBulkInputMeta extends BaseStepMeta implements StepMetaInt
 			timeout          =  rep.getStepAttributeString(id_step, "timeout");
 			useCompression   = rep.getStepAttributeBoolean(id_step, "useCompression"); 
 			
+			queryAll = rep.getStepAttributeBoolean( id_step, "queryAll" );
 			
 			int nrFields      = rep.countNrStepAttributes(id_step, "field_name");
 			
@@ -801,6 +822,7 @@ public class SalesforceBulkInputMeta extends BaseStepMeta implements StepMetaInt
 			rep.saveStepAttribute(id_transformation, id_step, "timeout",           timeout);
 			rep.saveStepAttribute(id_transformation, id_step, "useCompression",  useCompression);
 			
+			rep.saveStepAttribute( id_transformation, id_step, "queryAll", queryAll );
 			
 			for (int i=0;i<inputFields.length;i++)
 			{
