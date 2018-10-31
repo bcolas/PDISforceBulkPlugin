@@ -136,9 +136,11 @@ public class SalesforceBulkDelete extends BaseStep implements StepInterface {
 
  private void executeBatch() throws KettleException {
 	if ( log.isDetailed() ) logDetailed( "SalesforceBulkDelete.executeBatch()");
-	String s = "id\n";
+	String s = "id";
 	for (int i = 0; i < data.deleteId.length; i++)
-	  s += data.deleteId[i] + '\n';
+	  if (data.deleteId[i] != null)
+	    s += '\n' + data.deleteId[i];
+	if ( log.isDetailed() ) logDetailed( "Batch Content\n"+s);
     String batchId = data.connection.createBatch(new ByteArrayInputStream(s.getBytes()));
     data.connection.awaitCompletion();
     checkResults(batchId);
@@ -185,6 +187,8 @@ public class SalesforceBulkDelete extends BaseStep implements StepInterface {
 
    } catch ( Exception e ) {
      if ( !getStepMeta().isDoingErrorHandling() ) {
+       if (e instanceof KettleException)
+    	   throw (KettleException) e;
        throw new KettleException( BaseMessages.getString( PKG, "SalesforceBulkDelete.Error.FailedToDeleted", e.getMessage() ) );
      }
      // Simply add this row to the error row
