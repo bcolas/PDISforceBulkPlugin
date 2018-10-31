@@ -273,7 +273,7 @@ public class SalesforceBulkDeleteMeta extends BaseStepMeta implements StepMetaIn
    password = "";
    module = "Account";
    DeleteField = null;
-   batchSize = "10";
+   batchSize = SalesforceBulkConnectionUtils.BATCH_SIZE;
    useCompression = false;
    rollbackAllChangesOnError = false;
    timeout = "60000";

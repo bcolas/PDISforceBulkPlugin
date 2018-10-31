@@ -20,5 +20,7 @@ public class SalesforceBulkConnectionUtils {
 	public static final String SOAP_DEFAULT_URL= "https://login.salesforce.com/services/Soap/u/41.0";
 	
 	public static final String DEFAULT_TIMEOUT = "300000";
+	
+	public static final String BATCH_SIZE = "5000";
 
 }
